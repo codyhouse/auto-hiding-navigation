@@ -1,0 +1,466 @@
+// Note: we use Autoprefixer to add vendor prefixes to our CSS -> https://github.com/postcss/autoprefixer
+
+@import '../partials/variables'; // colors, fonts etc...
+
+@import '../partials/mixins'; // custom mixins
+
+@import '../partials/layout'; // responsive grid and media queries
+
+/* -------------------------------- 
+
+Primary style
+
+-------------------------------- */
+
+*, *::after, *::before {
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 62.5%;
+}
+
+body {
+	font: {
+		size: 1.6rem;
+		family: $primary-font; // variables inside partials > _variables.scss
+	}
+	color: $color-1;
+	background-color: $color-4;
+	@include font-smoothing;
+}
+
+a {
+	color: $color-2;
+	text-decoration: none;
+}
+
+/* -------------------------------- 
+
+1. Auto-Hiding Navigation - Simple
+
+-------------------------------- */
+
+.cd-auto-hide-header {
+	position: fixed;
+	z-index: 2;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: $header-height-small;
+	background-color: $color-3;
+	@include clearfix;
+	/* Force Hardware Acceleration */
+	transform: translateZ(0);
+	will-change: transform;
+	transition: transform .5s;
+
+	&.is-hidden {
+		transform: translateY(-100%);
+	}
+
+	@include MQ(L) {
+		height: $header-height;
+	}
+}
+
+.cd-auto-hide-header .logo, 
+.cd-auto-hide-header .nav-trigger {
+	position: absolute;
+	@include center(y);
+}
+
+.cd-auto-hide-header .logo {
+	left: 5%;
+
+	a, img {
+		display: block;
+	}
+}
+
+.cd-auto-hide-header .nav-trigger {
+	/* vertically align its content */
+	display: table;
+	height: 100%;
+	padding: 0 1em;
+	font-size: 1.2rem;
+	text-transform: uppercase;
+	color: $color-1;
+	font-weight: bold;
+	right: 0;
+	border-left: 1px solid shade($color-3, 5%);
+
+	span {
+		/* vertically align inside parent element */
+		display: table-cell;
+		vertical-align: middle;
+	}
+
+	em, em::after, em::before {
+		/* this is the menu icon */
+		display: block;
+		position: relative;
+		height: 2px;
+		width: 22px;
+		background-color: $color-1;
+		backface-visibility: hidden;
+	}
+
+	em {
+		/* this is the menu central line */
+		margin: 6px auto 14px;
+		transition: background-color .2s;
+	}
+
+	em::before, em::after {
+		position: absolute;
+		content: '';
+		left: 0;
+		transition: transform .2s;
+	}
+
+	em::before {
+		/* this is the menu icon top line */
+		transform: translateY(-6px);
+	}
+
+	em::after {
+		/* this is the menu icon bottom line */
+		transform: translateY(6px);
+	}
+
+	@include MQ(L) {
+		display: none;
+	}
+}
+
+.cd-auto-hide-header.nav-open .nav-trigger {
+	em {
+		/* transform menu icon into a 'X' icon */
+		background-color: rgba($color-3, 0);
+	}
+
+	em::before {
+		/* rotate top line */
+		transform: rotate(-45deg);
+	}
+
+	em::after {
+		/* rotate bottom line */
+		transform: rotate(45deg);
+	}
+}
+
+.cd-primary-nav {
+	display: inline-block;
+	float: right;
+	height: 100%;
+	padding-right: 5%;
+
+	> ul {
+		position: absolute;
+		z-index: 2;
+		top: $header-height-small;
+		left: 0;
+		width: 100%;
+		background-color: $color-3;
+		display: none;
+		box-shadow: 0 14px 20px rgba(#000, .2);
+
+		a {
+			/* target primary-nav links */
+			display: block;
+			height: 50px;
+			line-height: 50px;
+			padding-left: 5%;
+			color: $color-1;
+			font-size: 1.8rem;
+			border-top: 1px solid shade($color-3, 5%);
+
+			&:hover, &.active {
+				color: $color-2;
+			}
+		}
+	}
+
+	@include MQ(L) {
+		/* vertically align its content */
+		display: table;
+
+		> ul {
+			/* vertically align inside parent element */
+			display: table-cell;
+			vertical-align: middle;
+			/* reset mobile style */
+			position: relative;
+			width: auto;
+			top: 0;
+			padding: 0;
+			@include clearfix;
+			background-color: transparent;
+			box-shadow: none;
+
+			li {
+				display: inline-block;
+				float: left;
+				margin-right: 1.5em;
+
+				&:last-of-type {
+					margin-right: 0;
+				}
+			}
+
+			a {
+				/* reset mobile style */
+				height: auto;
+				line-height: normal;
+				padding: 0;
+				border: none;
+			}
+		}
+	}
+}
+
+.nav-open .cd-primary-nav ul, 
+.cd-primary-nav ul:target {
+	/* 
+		show primary nav - mobile only 
+		:target is used to show navigation on no-js devices
+	*/
+	display: block;
+
+	@include MQ(L) {
+		display: table-cell;
+	}
+}
+
+/* -------------------------------- 
+
+2. Auto-Hiding Navigation - with Sub Nav
+
+-------------------------------- */
+
+.cd-secondary-nav {
+	position: relative;
+	z-index: 1;
+	clear: both;
+	width: 100%;
+	height: $secondary-nav-height-small;
+	background-color: $color-1;
+	/* Force Hardware Acceleration */
+	transform: translateZ(0);
+	will-change: transform;
+	transition: transform .5s;
+
+	&::after {
+		/* gradient on the right - to indicate it's possible to scroll */
+		content: '';
+		position: absolute;
+		z-index: 1;
+		top: 0;
+		right: 0;
+		height: 100%;
+		width: 35px;
+		background: transparent;
+		background: linear-gradient(to left, $color-1, rgba($color-1, 0));
+		pointer-events: none;
+		transition: opacity .2s;
+	}
+
+	&.nav-end::after {
+		opacity: 0;
+	}
+
+	ul, li, a {
+		height: 100%;
+	}
+
+	ul {
+		/* enables a flex context for all its direct children */
+		display: flex;
+		padding: 0 5%;
+		@include clearfix;
+		overflow-x: auto;
+		-webkit-overflow-scrolling: touch;
+	}
+
+	li {
+		display: inline-block;
+		float: left;
+		/* do not shrink - elements float on the right of the element */
+		flex-shrink: 0;
+
+		&:last-of-type {
+			padding-right: 20px;
+		}
+	}
+
+	a {
+		display: block;
+		color: $color-3;
+		opacity: .6;
+		line-height: $secondary-nav-height-small;
+		padding: 0 1em;
+
+		&:hover, &.active {
+			opacity: 1;
+		}
+	}
+
+	@include MQ(L) {
+		height: $secondary-nav-height;
+		overflow: visible;
+
+		ul {
+			/* reset mobile style */
+			display: block;
+			text-align: center;
+		}
+
+		li {
+			/* reset mobile style */
+			float: none;
+			flex-shrink: 1;
+		}
+
+		a {
+			line-height: $secondary-nav-height;
+
+			&.active {
+				box-shadow: inset 0 -3px $color-2;
+			}
+		}
+	}
+}
+
+/* -------------------------------- 
+
+3. Auto-Hiding Navigation - with Sub Nav + Hero Image
+
+-------------------------------- */
+
+.cd-secondary-nav {
+	&.fixed {
+		position: fixed;
+		top: $header-height-small;
+	}
+
+	&.slide-up {
+		transform: translateY(-$header-height-small)
+	}
+
+	@include MQ(L) {
+
+		&.fixed {
+			top: $header-height;
+			/* fixes a bug where nav and subnab move with a slight delay */
+			box-shadow: 0 -6px 0 $color-1;
+		}
+
+		&.slide-up {
+			transform: translateY(-$header-height);
+		}
+	}
+}
+
+
+/* -------------------------------- 
+
+Main content
+
+-------------------------------- */
+
+.cd-main-content {
+	padding: $header-height-small 5% 2em;
+	overflow: hidden;
+
+	&.sub-nav {
+		/* to be used if there is sub nav */
+		padding-top: $header-height-small + $secondary-nav-height-small;
+	}
+
+	&.sub-nav-hero {
+		/* to be used if there is hero image + subnav */
+		padding-top: 0;
+
+		&.secondary-nav-fixed {
+			margin-top: $secondary-nav-height-small;
+		}
+	}
+
+	p {
+		max-width: $L;
+		line-height: 1.6;
+		margin: 2em auto;
+		font-family: $secondary-font;
+		color: shade($color-4, 30%);
+	}
+
+	@include MQ(L) {
+		padding-top: $header-height;
+
+		&.sub-nav {
+			padding-top: $header-height + $secondary-nav-height;
+		}
+
+		&.sub-nav-hero.secondary-nav-fixed {
+			margin-top: $secondary-nav-height;
+		}
+
+		p {
+			font-size: 2.4rem;
+		}
+	}
+}
+
+
+/*
+	adjust the positioning of in-page links
+	http://nicolasgallagher.com/jump-links-and-viewport-positioning/
+*/
+
+.cd-main-content.sub-nav :target::before,
+.cd-main-content.sub-nav-hero :target::before { 
+	display: block;
+  	content: ""; 
+  	margin-top: -$secondary-nav-height-small; 
+  	height: $secondary-nav-height-small; 
+  	visibility: hidden; 
+
+  	@include MQ(L) {
+  		margin-top: -$secondary-nav-height; 
+  		height: $secondary-nav-height;
+  	}
+}
+
+/* -------------------------------- 
+
+Intro Section
+
+-------------------------------- */
+
+.cd-hero {
+	/* vertically align its content */
+	display: table;
+	width: 100%;
+	margin-top: $header-height-small;
+	height: 300px;
+	background: url(../img/cd-hero-background.jpg) no-repeat center center;
+	background-size: cover;
+
+	.cd-hero-content {
+		/* vertically align inside parent element */
+		display: table-cell;
+		vertical-align: middle;
+		text-align: center;
+	}
+
+	@include MQ(M) {
+		height: 400px;
+	}
+
+	@include MQ(L) {
+		height: 600px;
+		margin-top: $header-height;
+	}
+}
