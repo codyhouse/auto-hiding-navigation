@@ -18,6 +18,16 @@ jQuery(document).ready(function($){
 		mainHeader.toggleClass('nav-open');
 	});
 
+	$(document).on('click', function (event) {
+
+
+    if (!mainHeader.is(event.target) // if the target of the click isn't the container...
+        && mainHeader.has(event.target).length === 0) // ... nor a descendant of the container
+    {
+        mainHeader.toggleClass('nav-open');
+    }
+	});
+
 	$(window).on('scroll', function(){
 		if( !scrolling ) {
 			scrolling = true;
