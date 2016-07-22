@@ -4,7 +4,7 @@ jQuery(document).ready(function($){
 		//this applies only if secondary nav is below intro section
 		belowNavHeroContent = $('.sub-nav-hero'),
 		headerHeight = mainHeader.height();
-	
+
 	//set scrolling variables
 	var scrolling = false,
 		previousTop = 0,
@@ -18,9 +18,20 @@ jQuery(document).ready(function($){
 		mainHeader.toggleClass('nav-open');
 	});
 
+	$(document).on('click', function (event) {
+
+
+    if (!mainHeader.is(event.target) // if the target of the click isn't the container...
+        && mainHeader.has(event.target).length === 0) // ... nor a descendant of the container
+    {
+        mainHeader.toggleClass('nav-open');
+    }
+	});
+
 	$(window).on('scroll', function(){
 		if( !scrolling ) {
 			scrolling = true;
+			mainHeader.removeClass('nav-open'); // Close menu if scroll
 			(!window.requestAnimationFrame)
 				? setTimeout(autoHideHeader, 250)
 				: requestAnimationFrame(autoHideHeader);
@@ -34,7 +45,7 @@ jQuery(document).ready(function($){
 	function autoHideHeader() {
 		var currentTop = $(window).scrollTop();
 
-		( belowNavHeroContent.length > 0 ) 
+		( belowNavHeroContent.length > 0 )
 			? checkStickyNavigation(currentTop) // secondary navigation below intro
 			: checkSimpleNavigation(currentTop);
 
@@ -56,9 +67,9 @@ jQuery(document).ready(function($){
 	function checkStickyNavigation(currentTop) {
 		//secondary nav below intro section - sticky secondary nav
 		var secondaryNavOffsetTop = belowNavHeroContent.offset().top - secondaryNavigation.height() - mainHeader.height();
-		
+
 		if (previousTop >= currentTop ) {
-	    	//if scrolling up... 
+	    	//if scrolling up...
 	    	if( currentTop < secondaryNavOffsetTop ) {
 	    		//secondary nav is not fixed
 	    		mainHeader.removeClass('is-hidden');
@@ -67,19 +78,19 @@ jQuery(document).ready(function($){
 	    	} else if( previousTop - currentTop > scrollDelta ) {
 	    		//secondary nav is fixed
 	    		mainHeader.removeClass('is-hidden');
-	    		secondaryNavigation.removeClass('slide-up').addClass('fixed'); 
+	    		secondaryNavigation.removeClass('slide-up').addClass('fixed');
 	    		belowNavHeroContent.addClass('secondary-nav-fixed');
 	    	}
-	    	
+
 	    } else {
-	    	//if scrolling down...	
+	    	//if scrolling down...
 	 	  	if( currentTop > secondaryNavOffsetTop + scrollOffset ) {
 	 	  		//hide primary nav
 	    		mainHeader.addClass('is-hidden');
 	    		secondaryNavigation.addClass('fixed slide-up');
 	    		belowNavHeroContent.addClass('secondary-nav-fixed');
 	    	} else if( currentTop > secondaryNavOffsetTop ) {
-	    		//once the secondary nav is fixed, do not hide primary nav if you haven't scrolled more than scrollOffset 
+	    		//once the secondary nav is fixed, do not hide primary nav if you haven't scrolled more than scrollOffset
 	    		mainHeader.removeClass('is-hidden');
 	    		secondaryNavigation.addClass('fixed').removeClass('slide-up');
 	    		belowNavHeroContent.addClass('secondary-nav-fixed');
