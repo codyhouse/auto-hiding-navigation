@@ -6,7 +6,7 @@
 
 @import '../partials/layout'; // responsive grid and media queries
 
-/* -------------------------------- 
+/* --------------------------------
 
 Primary style
 
@@ -35,7 +35,7 @@ a {
 	text-decoration: none;
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 1. Auto-Hiding Navigation - Simple
 
@@ -64,7 +64,7 @@ a {
 	}
 }
 
-.cd-auto-hide-header .logo, 
+.cd-auto-hide-header .logo,
 .cd-auto-hide-header .nav-trigger {
 	position: absolute;
 	@include center(y);
@@ -166,6 +166,8 @@ a {
 		background-color: $color-3;
 		display: none;
 		box-shadow: 0 14px 20px rgba(#000, .2);
+		overflow-y: scroll;
+	  max-height: 50vh;
 
 		a {
 			/* target primary-nav links */
@@ -221,10 +223,10 @@ a {
 	}
 }
 
-.nav-open .cd-primary-nav ul, 
+.nav-open .cd-primary-nav ul,
 .cd-primary-nav ul:target {
-	/* 
-		show primary nav - mobile only 
+	/*
+		show primary nav - mobile only
 		:target is used to show navigation on no-js devices
 	*/
 	display: block;
@@ -234,7 +236,7 @@ a {
 	}
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 2. Auto-Hiding Navigation - with Sub Nav
 
@@ -333,7 +335,7 @@ a {
 	}
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 3. Auto-Hiding Navigation - with Sub Nav + Hero Image
 
@@ -364,7 +366,7 @@ a {
 }
 
 
-/* -------------------------------- 
+/* --------------------------------
 
 Main content
 
@@ -420,20 +422,20 @@ Main content
 */
 
 .cd-main-content.sub-nav :target::before,
-.cd-main-content.sub-nav-hero :target::before { 
+.cd-main-content.sub-nav-hero :target::before {
 	display: block;
-  	content: ""; 
-  	margin-top: -$secondary-nav-height-small; 
-  	height: $secondary-nav-height-small; 
-  	visibility: hidden; 
+  	content: "";
+  	margin-top: -$secondary-nav-height-small;
+  	height: $secondary-nav-height-small;
+  	visibility: hidden;
 
   	@include MQ(L) {
-  		margin-top: -$secondary-nav-height; 
+  		margin-top: -$secondary-nav-height;
   		height: $secondary-nav-height;
   	}
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 Intro Section
 

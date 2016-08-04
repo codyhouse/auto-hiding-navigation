@@ -1,4 +1,4 @@
-/* -------------------------------- 
+/* --------------------------------
 
 Primary style
 
@@ -25,7 +25,7 @@ a {
   text-decoration: none;
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 1. Auto-Hiding Navigation - Simple
 
@@ -172,6 +172,8 @@ a {
   background-color: #ffffff;
   display: none;
   box-shadow: 0 14px 20px rgba(0, 0, 0, 0.2);
+  overflow-y: scroll;
+  max-height: 50vh;
 }
 .cd-primary-nav > ul a {
   /* target primary-nav links */
@@ -227,8 +229,8 @@ a {
 
 .nav-open .cd-primary-nav ul,
 .cd-primary-nav ul:target {
-  /* 
-  	show primary nav - mobile only 
+  /*
+  	show primary nav - mobile only
   	:target is used to show navigation on no-js devices
   */
   display: block;
@@ -240,7 +242,7 @@ a {
   }
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 2. Auto-Hiding Navigation - with Sub Nav
 
@@ -344,7 +346,7 @@ a {
   }
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 3. Auto-Hiding Navigation - with Sub Nav + Hero Image
 
@@ -371,7 +373,7 @@ a {
   }
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 Main content
 
@@ -433,7 +435,7 @@ Main content
   }
 }
 
-/* -------------------------------- 
+/* --------------------------------
 
 Intro Section
 
